@@ -66,10 +66,8 @@ public class ChordLookup {
 		// starting from the last entry, iterate over the finger table
 		for (int i = fingerTables.size()-1; i >= 0; i--) {
 
-			NodeInterface finger = fingerTables.get(i);
-
 			// for each finger, obtain a stub from the registry
-			finger.
+			NodeInterface stub = Util.getProcessStub(fingerTables.get(i).getNodeName(), fingerTables.get(i).getPort());
 
 			// check that finger is a member of the set {nodeID+1,...,ID-1} i.e. (nodeID+1 <= finger <= key-1) using the ComputeLogic
 

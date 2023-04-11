@@ -45,14 +45,24 @@ public class Util {
 		
 		// Task: given an identifier, id: check whether pred < id <= node
 
-		
+		boolean result = false;
 
+		BigInteger mod = Hash.addressSize();
 
+		// check if lower < upper and id is in the interval (lower, upper]
+		if (lower.compareTo(upper) < 0) {
+			result = id.compareTo(lower) >= 0 && id.compareTo(upper) <= 0;
+		}
 
+		if (lower.compareTo(upper) > 0) {
+			result = id.compareTo(lower) >= 0 && (id.compareTo(upper) >= 0 && id.compareTo(mod) <= 0);
+		}
 
-		
-		return false;
+		if (lower.compareTo(upper) == 0) {
+			result = id.compareTo(mod) < 0 && id.compareTo(new BigInteger("0")) >= 0;
+		}
 
+		return result;
 	}
 	
 	public static List<String> toString(List<NodeInterface> list) throws RemoteException {
