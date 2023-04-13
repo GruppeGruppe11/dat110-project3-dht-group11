@@ -105,7 +105,9 @@ public class MutualExclusion {
 			NodeInterface stub = Util.getProcessStub(m.getNodeName(), m.getPort());
 
 			// call onMutexRequestReceived()
-			if (stub!=null) stub.onMutexRequestReceived(message);
+			if (stub != null) {
+				stub.onMutexRequestReceived(message);
+			}
 		}
 		
 	}
@@ -116,7 +118,7 @@ public class MutualExclusion {
 		clock.increment();
 		
 		// if message is from self, acknowledge, and call onMutexAcknowledgementReceived()
-		if (message.getNodeName().equals(node.nodename)) {
+		if (message.getNodeName().equals(node.getNodeName())) {
 			message.setAcknowledged(true);
 			onMutexAcknowledgementReceived(message);
 		}
@@ -159,7 +161,7 @@ public class MutualExclusion {
 				message.setAcknowledged(true);
 				
 				// send acknowledgement back by calling onMutexAcknowledgementReceived()
-				if (stub!=null) stub.onMutexAcknowledgementReceived(message);
+				stub.onMutexAcknowledgementReceived(message);
 				
 				break;
 			}
@@ -186,18 +188,20 @@ public class MutualExclusion {
 				int ownClock = clock.getClock();
 				
 				// compare clocks, the lowest wins
-				int compare = Integer.compare(senderClock, ownClock);
+				int compare = senderClock-ownClock;
 				
 				// if clocks are the same, compare nodeIDs, the lowest wins
 				if (compare == 0) {
 					compare = message.getNodeID().compareTo(node.getNodeID());
 				}
-				
+
 				// if sender wins, acknowledge the message, obtain a stub and call onMutexAcknowledgementReceived()
 				if (compare < 0) {
 					message.setAcknowledged(true);
 					NodeInterface stub = Util.getProcessStub(procName, port);
-					if (stub!=null) stub.onMutexAcknowledgementReceived(message);
+					if (stub != null) {
+						stub.onMutexAcknowledgementReceived(message);
+					}
 				} else {
 					// if sender looses, queue it
 					queue.add(message);
@@ -229,7 +233,9 @@ public class MutualExclusion {
 
 			// call releaseLocks()
 			try {
-				if (stub!=null) stub.releaseLocks();
+				if (stub != null) {
+					stub.releaseLocks();
+				}
 			} catch (RemoteException e) {
 				throw new RuntimeException(e);
 			}
@@ -240,13 +246,17 @@ public class MutualExclusion {
 		logger.info(node.getNodeName()+": size of queueack = "+queueack.size());
 		
 		// check if the size of the queueack is same as the numvoters
-		boolean allreturned = queueack.size() == numvoters;
-		
+		boolean allReturned = queueack.size() == numvoters;
+
 		// clear the queueack
-		if (allreturned) queueack.clear();
+		if (allReturned) {
+			queueack.clear();
+			return true;
+		}
 		
 		// return true if yes and false if no
-		return allreturned;
+		return false;
+
 	}
 	
 	private List<Message> removeDuplicatePeersBeforeVoting() {
