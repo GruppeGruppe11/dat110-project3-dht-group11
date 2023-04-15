@@ -4,7 +4,7 @@
 - Bjørn Egil Øygarden
 - Bjørn-Sigurd Sælevik Fjose
 
-![](assets/passed)
+![](assets/passed.png)
 
 ---
 
