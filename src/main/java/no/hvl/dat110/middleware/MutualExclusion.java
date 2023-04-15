@@ -77,7 +77,9 @@ public class MutualExclusion {
 		multicastMessage(message, messages);
 		
 		// check that all replicas have replied (permission)
-		if (areAllMessagesReturned(messages.size())) {
+		boolean permission = areAllMessagesReturned(messages.size());
+
+		if (permission) {
 			// if yes, acquireLock
 			acquireLock();
 
@@ -86,12 +88,10 @@ public class MutualExclusion {
 
 			// clear the mutexqueue
 			mutexqueue.clear();
-
-			// return permission
-			return true;
 		}
-		
-		return false;
+
+		// return permission
+		return permission;
 	}
 	
 	// multicast message to other processes including self
@@ -185,7 +185,7 @@ public class MutualExclusion {
 				int senderClock = message.getClock();
 				
 				// own clock for the multicast message (note that the correct clock is in the message)
-				int ownClock = clock.getClock();
+				int ownClock = node.getMessage().getClock();
 				
 				// compare clocks, the lowest wins
 				int compare = senderClock-ownClock;
