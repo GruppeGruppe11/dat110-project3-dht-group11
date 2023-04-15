@@ -1,3 +1,13 @@
+# Project 3 - Group 11
+
+- Anders Waage
+- Bjørn Egil Øygarden
+- Bjørn-Sigurd Sælevik Fjose
+
+![](assets/passed)
+
+---
+
 ### Project 3 - Weeks 12 to 15: 19/03 - 15/04
 
 ### DHT Cooperative Mirroring with consistency protocol and Distributed Mutual Exclusion.
